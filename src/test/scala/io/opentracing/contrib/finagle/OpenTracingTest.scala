@@ -47,7 +47,7 @@ class OpenTracingTest extends FunSuite {
 
     val responseFuture: Future[http.Response] = client(request)
 
-    var result = Await.result(responseFuture)
+    val result = Await.result(responseFuture)
     println(result + " " + result.contentString)
 
     val spans = mockTracer.finishedSpans()
