@@ -33,7 +33,6 @@ class OpenTracingTest extends FunSuite {
     val service = openTracingFilter andThen new Service[http.Request, http.Response] {
       def apply(req: http.Request): Future[http.Response] = {
 
-        println("server: " + Thread.currentThread().getName)
         val response = Response()
         response.setContentString("Hello from Finagle\n")
         Future.value(response)

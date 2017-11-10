@@ -54,13 +54,11 @@ class OpenTracingHttpFilter(tracer: Tracer) extends SimpleFilter[Request, Respon
     }
 
     val future = service(request)
-    println(Thread.currentThread().getName)
 
     future respond {
       case Return(reply) =>
         span.setTag(Tags.HTTP_STATUS.getKey, reply.status.code)
         span.finish()
-        println("respond: " + Thread.currentThread().getName)
       case Throw(throwable) =>
         val exceptionLogs: util.Map[String, AnyRef] = new util.LinkedHashMap[String, AnyRef](2)
         exceptionLogs.put("event", Tags.ERROR.getKey)
