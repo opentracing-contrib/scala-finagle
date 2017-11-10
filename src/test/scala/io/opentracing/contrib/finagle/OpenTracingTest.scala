@@ -45,9 +45,10 @@ class OpenTracingTest extends FunSuite {
     val client = openTracingFilter andThen Http.client.newService(port)
     val request = http.Request(http.Method.Get, "/")
 
-    val response: Future[http.Response] = client(request)
+    val responseFuture: Future[http.Response] = client(request)
 
-    Await.result(response)
+    var result = Await.result(responseFuture)
+    println(result + " " + result.contentString)
 
     val spans = mockTracer.finishedSpans()
     assert(spans.size() == 2)
