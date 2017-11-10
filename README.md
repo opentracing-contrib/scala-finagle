@@ -15,15 +15,12 @@ libraryDependencies += "io.opentracing.contrib" % "opentracing-finagle" % "0.0.1
 ```scala
 // Instantiate tracer
 val tracer: Tracer = ...
-
-// Instantiate OpenTracingHttpFilter
-val openTracingHttpFilter = new OpenTracingHttpFilter(tracer)
 ```
 
 ### Http Server
 ```scala
-// Apply filter to Finagle service to serve HTTP requests
-val service = openTracingHttpFilter andThen new Service[http.Request, http.Response] {
+// Apply OpenTracingHttpFilter to Finagle service to serve HTTP requests
+val service = new OpenTracingHttpFilter(tracer) andThen new Service[http.Request, http.Response] {
     def apply(req: http.Request): Future[http.Response] =
       Future.value(
         http.Response(req.version, http.Status.Ok)
@@ -37,8 +34,8 @@ Await.ready(server)
 
 ### Http Client
 ```scala
-// Apply filter to Finagle client service 
-val client = openTracingHttpFilter andThen Http.client.newService(":8080")
+// Apply OpenTracingHttpFilter to Finagle client service 
+val client = new OpenTracingHttpFilter(tracer) andThen Http.client.newService(":8080")
 
 // Build request
 val request = http.Request(http.Method.Get, "/")

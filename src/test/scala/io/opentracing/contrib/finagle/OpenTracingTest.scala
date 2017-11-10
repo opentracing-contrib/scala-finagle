@@ -25,13 +25,12 @@ import org.scalatest.FunSuite
 class OpenTracingTest extends FunSuite {
 
   val mockTracer = new MockTracer(new ThreadLocalActiveSpanSource, Propagator.TEXT_MAP)
-  val openTracingFilter = new OpenTracingHttpFilter(mockTracer)
   val port = ":53732"
 
   test("test instrumentation") {
     mockTracer.reset()
 
-    val service = openTracingFilter andThen new Service[http.Request, http.Response] {
+    val service = new OpenTracingHttpFilter(mockTracer) andThen new Service[http.Request, http.Response] {
       def apply(req: http.Request): Future[http.Response] = {
 
         val response = Response()
@@ -42,7 +41,7 @@ class OpenTracingTest extends FunSuite {
 
     val server = Http.server.serve(port, service)
 
-    val client = openTracingFilter andThen Http.client.newService(port)
+    val client = new OpenTracingHttpFilter(mockTracer) andThen Http.client.newService(port)
     val request = http.Request(http.Method.Get, "/")
 
     val responseFuture: Future[http.Response] = client(request)
