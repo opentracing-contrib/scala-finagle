@@ -26,6 +26,7 @@ class OpenTracingTest extends FunSuite {
 
   val mockTracer = new MockTracer(new ThreadLocalActiveSpanSource, Propagator.TEXT_MAP)
   val openTracingFilter = new OpenTracingHttpFilter(mockTracer)
+  val port = ":53732"
 
   test("test instrumentation") {
     mockTracer.reset()
@@ -39,9 +40,9 @@ class OpenTracingTest extends FunSuite {
       }
     }
 
-    val server = Http.server.serve(":8080", service)
+    val server = Http.server.serve(port, service)
 
-    val client = openTracingFilter andThen Http.client.newService(":8080")
+    val client = openTracingFilter andThen Http.client.newService(port)
     val request = http.Request(http.Method.Get, "/")
 
     val response: Future[http.Response] = client(request)
