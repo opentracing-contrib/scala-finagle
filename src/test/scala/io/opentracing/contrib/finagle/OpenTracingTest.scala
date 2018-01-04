@@ -13,12 +13,16 @@
  */
 package io.opentracing.contrib.finagle
 
+import java.util.concurrent.{Callable, TimeUnit}
+
 import com.twitter.finagle.http.Response
 import com.twitter.finagle.{Http, Service, http}
 import com.twitter.util.{Await, Future}
 import io.opentracing.mock.MockTracer
 import io.opentracing.mock.MockTracer.Propagator
 import io.opentracing.util.ThreadLocalActiveSpanSource
+import org.awaitility.Awaitility.await
+import org.hamcrest.core.IsEqual.equalTo
 import org.scalatest.FunSuite
 
 
@@ -49,6 +53,8 @@ class OpenTracingTest extends FunSuite {
     val result = Await.result(responseFuture)
     println(result + " " + result.contentString)
 
+    await atMost(15, TimeUnit.SECONDS) until(reportedSpansSize(mockTracer), equalTo(2))
+
     val spans = mockTracer.finishedSpans()
     assert(spans.size() == 2)
 
@@ -58,6 +64,10 @@ class OpenTracingTest extends FunSuite {
     })
 
     server.close()
+  }
+
+  private def reportedSpansSize(mockTracer: MockTracer): Callable[Int] = {
+    () => mockTracer.finishedSpans().size()
   }
 }
 
