@@ -20,7 +20,7 @@ val tracer: Tracer = ...
 ### Http Server
 ```scala
 // Apply OpenTracingHttpFilter to Finagle service to serve HTTP requests
-val service = new OpenTracingHttpFilter(tracer) andThen new Service[http.Request, http.Response] {
+val service = new OpenTracingHttpFilter(tracer, true) andThen new Service[http.Request, http.Response] {
     def apply(req: http.Request): Future[http.Response] =
       Future.value(
         http.Response(req.version, http.Status.Ok)
@@ -35,7 +35,7 @@ Await.ready(server)
 ### Http Client
 ```scala
 // Apply OpenTracingHttpFilter to Finagle client service 
-val client = new OpenTracingHttpFilter(tracer) andThen Http.client.newService(":8080")
+val client = new OpenTracingHttpFilter(tracer, false) andThen Http.client.newService(":8080")
 
 // Build request
 val request = http.Request(http.Method.Get, "/")

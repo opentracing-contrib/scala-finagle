@@ -25,15 +25,23 @@ import io.opentracing.{References, Tracer}
 /**
   * OpenTracing Http filter
   *
-  * @param tracer OpenTracing tracer
+  * @param tracer         OpenTracing tracer
+  * @param isServerFilter true if filter is applied to Server, false if applied to Client
   */
-class OpenTracingHttpFilter(tracer: Tracer) extends SimpleFilter[Request, Response] {
+class OpenTracingHttpFilter(tracer: Tracer, isServerFilter: Boolean) extends SimpleFilter[Request, Response] {
 
   def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
 
     val spanBuilder = tracer.buildSpan(request.method.name)
-        .withTag(Tags.HTTP_METHOD.getKey, request.method.name)
-        .withTag(Tags.HTTP_URL.getKey, request.uri)
+      .withTag(Tags.COMPONENT.getKey, "finagle")
+      .withTag(Tags.HTTP_METHOD.getKey, request.method.name)
+      .withTag(Tags.HTTP_URL.getKey, request.uri)
+
+    if (isServerFilter) {
+      spanBuilder.withTag(Tags.SPAN_KIND.getKey, Tags.SPAN_KIND_SERVER)
+    } else {
+      spanBuilder.withTag(Tags.SPAN_KIND.getKey, Tags.SPAN_KIND_CLIENT)
+    }
 
     if (request.remotePort > 0) {
       spanBuilder.withTag(Tags.PEER_PORT.getKey, request.remotePort)
@@ -48,10 +56,8 @@ class OpenTracingHttpFilter(tracer: Tracer) extends SimpleFilter[Request, Respon
 
     val span = spanBuilder.startManual()
 
-    if (parent == null) {
-      tracer.inject(span.context(), Format.Builtin.HTTP_HEADERS,
-        new HeaderMapInjectAdapter(request.headerMap))
-    }
+    tracer.inject(span.context(), Format.Builtin.HTTP_HEADERS,
+      new HeaderMapInjectAdapter(request.headerMap))
 
     val future = service(request)
 

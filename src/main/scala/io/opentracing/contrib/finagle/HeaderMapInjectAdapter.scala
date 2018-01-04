@@ -19,7 +19,7 @@ import io.opentracing.propagation.TextMap
 class HeaderMapInjectAdapter(headerMap: HeaderMap) extends TextMap {
 
   override def put(key: String, value: String) = {
-    headerMap.add(key, value)
+    headerMap.set(key, value)
   }
 
   override def iterator() = throw new UnsupportedOperationException("iterator should never be used with Tracer.inject()")

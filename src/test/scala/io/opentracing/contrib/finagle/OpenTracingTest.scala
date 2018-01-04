@@ -30,7 +30,7 @@ class OpenTracingTest extends FunSuite {
   test("test instrumentation") {
     mockTracer.reset()
 
-    val service = new OpenTracingHttpFilter(mockTracer) andThen new Service[http.Request, http.Response] {
+    val service = new OpenTracingHttpFilter(mockTracer, true) andThen new Service[http.Request, http.Response] {
       def apply(req: http.Request): Future[http.Response] = {
 
         val response = Response()
@@ -41,7 +41,7 @@ class OpenTracingTest extends FunSuite {
 
     val server = Http.server.serve(port, service)
 
-    val client = new OpenTracingHttpFilter(mockTracer) andThen Http.client.newService(port)
+    val client = new OpenTracingHttpFilter(mockTracer, false) andThen Http.client.newService(port)
     val request = http.Request(http.Method.Get, "/")
 
     val responseFuture: Future[http.Response] = client(request)
