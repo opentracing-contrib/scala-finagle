@@ -18,7 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.opentracing.contrib</groupId>
   <artifactId>opentracing-finagle</artifactId>
-  <version>0.0.2</version>
+  <version>0.0.3-SNAPSHOT</version>
 
   <name>${project.groupId}:${project.artifactId}</name>
   <description>OpenTracing Instrumentation for Finagle</description>
@@ -30,7 +30,7 @@
     <connection>scm:git:https://github.com/opentracing-contrib/scala-finagle.git</connection>
     <developerConnection>scm:git:https://github.com/opentracing-contrib/scala-finagle.git
     </developerConnection>
-    <tag>0.0.2</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <licenses>
