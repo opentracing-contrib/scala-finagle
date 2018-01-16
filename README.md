@@ -7,7 +7,7 @@ OpenTracing instrumentation for Finagle.
 
 build.sbt
 ```sbt
-libraryDependencies += "io.opentracing.contrib" % "opentracing-finagle" % "0.0.1"
+libraryDependencies += "io.opentracing.contrib" % "opentracing-finagle" % "0.0.2"
 ```
 
 ## Usage

@@ -20,7 +20,7 @@ import com.twitter.finagle.{Http, Service, http}
 import com.twitter.util.{Await, Future}
 import io.opentracing.mock.MockTracer
 import io.opentracing.mock.MockTracer.Propagator
-import io.opentracing.util.ThreadLocalActiveSpanSource
+import io.opentracing.util.ThreadLocalScopeManager
 import org.awaitility.Awaitility.await
 import org.hamcrest.core.IsEqual.equalTo
 import org.scalatest.FunSuite
@@ -28,7 +28,7 @@ import org.scalatest.FunSuite
 
 class OpenTracingTest extends FunSuite {
 
-  val mockTracer = new MockTracer(new ThreadLocalActiveSpanSource, Propagator.TEXT_MAP)
+  val mockTracer = new MockTracer(new ThreadLocalScopeManager, Propagator.TEXT_MAP)
   val port = ":53732"
 
   test("test instrumentation") {

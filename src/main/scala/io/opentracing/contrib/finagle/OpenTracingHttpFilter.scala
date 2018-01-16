@@ -54,7 +54,7 @@ class OpenTracingHttpFilter(tracer: Tracer, isServerFilter: Boolean) extends Sim
       spanBuilder.addReference(References.FOLLOWS_FROM, parent)
     }
 
-    val span = spanBuilder.startManual()
+    val span = spanBuilder.start()
 
     tracer.inject(span.context(), Format.Builtin.HTTP_HEADERS,
       new HeaderMapInjectAdapter(request.headerMap))
