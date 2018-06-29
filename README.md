@@ -1,4 +1,4 @@
-[![Build Status][ci-img]][ci] [![Released Version][maven-img]][maven]
+[![Build Status][ci-img]][ci] [![Coverage Status][cov-img]][cov] [![Released Version][maven-img]][maven]
 
 # OpenTracing Finagle Instrumentation
 OpenTracing instrumentation for Finagle.
@@ -50,5 +50,7 @@ val result = Await.result(response)
 
 [ci-img]: https://travis-ci.org/opentracing-contrib/scala-finagle.svg?branch=master
 [ci]: https://travis-ci.org/opentracing-contrib/scala-finagle
+[cov-img]: https://coveralls.io/repos/github/opentracing-contrib/scala-finagle/badge.svg?branch=master
+[cov]: https://coveralls.io/github/opentracing-contrib/scala-finagle?branch=master
 [maven-img]: https://img.shields.io/maven-central/v/io.opentracing.contrib/opentracing-finagle.svg
 [maven]: http://search.maven.org/#search%7Cga%7C1%7Copentracing-finagle
