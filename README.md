@@ -47,6 +47,9 @@ val response: Future[http.Response] = client(request)
 val result = Await.result(response)
 ```
 
+## License
+
+[Apache 2.0 License](./LICENSE).
 
 [ci-img]: https://travis-ci.org/opentracing-contrib/scala-finagle.svg?branch=master
 [ci]: https://travis-ci.org/opentracing-contrib/scala-finagle
