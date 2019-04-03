@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 The OpenTracing Authors
+ * Copyright 2017-2019 The OpenTracing Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -19,8 +19,6 @@ import com.twitter.finagle.http.Response
 import com.twitter.finagle.{Http, Service, http}
 import com.twitter.util.{Await, Future}
 import io.opentracing.mock.MockTracer
-import io.opentracing.mock.MockTracer.Propagator
-import io.opentracing.util.ThreadLocalScopeManager
 import org.awaitility.Awaitility.await
 import org.hamcrest.core.IsEqual.equalTo
 import org.scalatest.FunSuite
@@ -28,7 +26,7 @@ import org.scalatest.FunSuite
 
 class OpenTracingTest extends FunSuite {
 
-  val mockTracer = new MockTracer(new ThreadLocalScopeManager, Propagator.TEXT_MAP)
+  val mockTracer = new MockTracer()
   val port = ":53732"
 
   test("test instrumentation") {
